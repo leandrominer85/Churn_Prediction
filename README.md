@@ -6,6 +6,17 @@
 
 # Churn_Prediction
 
+Esse projeto tem como objetivo demonstrar como criar um modelo de machine learning com tunning de hiperparâmetros em um dataset de Churn rate.
+
+Churn rate, ou simplesmente churn, representa a taxa de evasão da sua base de clientes. Em serviços como Spotify ou Netflix, ela representaria a taxa de cancelamento de assinaturas.
+
+Ela é de extrema importância para a administração e sua análise ao longo do tempo pode mostrar que existe algum problema que deve ser atacado.
+
+Churn também pode ser usado para identificar potenciais cancelamentos, com um tempo de antecedência, e promover ações direcionadas para tentar reter tais clientes. Essa métrica deve receber atenção pelo fato de que o Custo de Aquisição de Cliente (CAC) é normalmente mais alto que o custo para mantê-los. Ou seja, um alto valor para o churn rate é o que não desejamos.
+
+## Aquisição dos Dados
+
+Os dados utilizados neste projeto foram originalmente disponibilizados na plataforma de ensino da IBM Developer, e tratam de um problema típico de uma companhia de telecomunicações. O dataset completo pode ser encontrado neste [link](https://raw.githubusercontent.com/carlosfab/dsnp2/master/datasets/WA_Fn-UseC_-Telco-Customer-Churn.csv) .
 
 
 ## Dicionário de Variáveis
@@ -39,15 +50,64 @@
 
 
 
-## Alguns exemplos de visualizações
+## Tratamento da base
 
+Por se tratar de uma base desbalanceada e com a variável alvo binária é necessário balancear o dataset e normalizar as variáveis não categórigas.
+Primeiramente dividi o dataset em treino e teste. Para o balanceamento e posterior utilização nos modelos de machine learning utilizei três métodos de sampling:
+
+![image](https://user-images.githubusercontent.com/48839817/148216159-456b560d-4f26-42a2-acca-0638200259ed.png)
+
+A parte de standarização das variáveis foi incorporada dentro de um pipeline encapsulado dentro de uma função que gera as estatísticas dos modelos de Machine Learning.
+
+
+## Machine Learning
+
+Por se tratar de um modelo de classificação com aprendizado de máquina supervisionado optei pelos seguintes modelos para análise: LogisticRegression, DecisionTreeClassifier, RandomForestClassifier, LinearSVC , Adaboost, XGBClassifier e LGBMClassifier. Todos esses modelos foram encapsulados na supracitada função e utilizados com seus parâmetros padrão e randomstate = 42.
+Como mencionado a parte de tratamento das variáveis foi incorporada nessa função. Ela fornece prints com as principais estatísticas para esses modelos.
+Para cada método de sampling foi rodada essa função. Um exemplo de parte do output dela:
+
+![image](https://user-images.githubusercontent.com/48839817/149372209-d893e4d8-39a6-4176-b0ad-df8b871b44e5.png)
+
+![image](https://user-images.githubusercontent.com/48839817/149372279-89eb202b-94ff-46c6-ade2-f4e36aafde55.png)
+
+
+Pensando nessa métrica e avaliando os resultados entre as três técnicas de sampling o Adaboost apresenta os melhores resultados em geral:. O melhor resultado sendo com Smote:
+
+
+| AdaBoostClassifier |                      |
+|--------------------|----------------------|
+| Accuracy:          | 0.6952200662565073   |
+| Precision:         | 0.4591937069813176 |
+| Recall:            | 0.8324420677361853    |
+| F1:                | 0.5918884664131813  |
+| Roc_auc:           | 0.7390303122186082   |
+
+
+
+## Tunning dos hiperparâmetros
+
+Após selecionar o modelo base (Adaboost) procedemos ao tunning utilizando o dataset sem tranformção das variáveis numéricas pois tanto o Adaboost quanto o XGboost que também irei otimizar são baseados em algoritmos de árvore que lidam bem com variáveis não normalizadas. Também foram utilizados as bibliotecas StratifiedKFold e GridSearchCV para otimização:
+
+![image](https://user-images.githubusercontent.com/48839817/149375345-a20dbb92-75d3-4e45-8aa0-042dc05e8d7a.png)
 
 
 
 ## Conclusão
 
+A escolha da métrica de avaliação de um modelo de aprendizado de máquina deve ser atrelada ao problema que se quer atacar.
+Por se tratar de uma um projeto de churn queremos minimizar a presença de falsos negativos - quando se trata de um churn mas classificamos como not churned.
+Por isso, a métrica principal que levei em conta na escolha dos modelos foi Recall. O resultado foi o seguinte:
 
 
+![image](https://user-images.githubusercontent.com/48839817/149375766-4980cc9f-f760-4320-8ffa-c525a3a7669d.png)
+
+
+
+Outras conclusões:
+
+* Mesmo em um dataset previamente trabalhado temos a necessidade de uma análise exploratória minuciosa
+* Em datasets desbalanceados um ponto crítico que interfere nos modelos é as escolhas que fazemos de sampling
+* Mesmo testando diversos modelos e diversas métricas a conclusão pelo melhor modelo só pode ser feita quando otimizarmos os hiperparâmetros, mas já temos pistas que indicam que Adaboost ou Random Forest podem ser boas escolhas.
 
 
 ## Software & Bibliotecas
@@ -57,16 +117,17 @@ O Projeto utilizou Python 3 e as seguintes bibliotecas:
 -   [Pandas](http://pandas.pydata.org/)
 -   [Seaborn](https://seaborn.pydata.org/index.html)
 -   [Matplotlib](https://matplotlib.org/)
--   [ipywidgets](https://ipywidgets.readthedocs.io/en/latest/)
--   [bar_chart_race](https://pypi.org/project/bar-chart-race/)
+-   [sklearn](https://scikit-learn.org/stable/)
+-   [imbalanced-learn](https://imbalanced-learn.org/stable/)
+-   [scikitplot](https://scikit-plot.readthedocs.io/en/stable/Quickstart.html)
+-   [datetime](https://docs.python.org/3/library/datetime.html)
+-   [numpy](https://numpy.org/)
 
 
 **Meus Links:**
-* [Artigo desse projeto no Medium](https://epp-minervino.medium.com/an%C3%A1lise-explorat%C3%B3ria-da-covid-19-fac91234ccee)
+
 * [LinkedIn](https://www.linkedin.com/in/leandro-minervino-b469681b/)
-* [Colab](https://colab.research.google.com/drive/1o4dzudIzvU1XIkGKI29nh7yPBMh9avuv?usp=sharing)
-
-
+* [Colab](https://colab.research.google.com/drive/1SkgqRVi2Y6016fKROhCkTVGpUivDyu3G?usp=sharing)
 
 
 
@@ -80,3 +141,5 @@ O Projeto utilizou Python 3 e as seguintes bibliotecas:
 * **[Disaster-Response-Pipelines](https://github.com/leandrominer85/Disaster-Response-Pipelines)**
 
 * **[Dados do Airbnb Lisboa](https://github.com/leandrominer85/Dados-do-Airbnb-Lisboa/blob/main/README.md)**
+
+* **[Panorama COVID-19](https://github.com/leandrominer85/Panorama_Covid-19)**
