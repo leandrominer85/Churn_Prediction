@@ -4,7 +4,7 @@
 ![alt text](https://user-images.githubusercontent.com/48839817/149339672-676506a7-f87d-4263-a91b-5efb3c768811.png)
 
 
-# Churn_Prediction
+# Churn Prediction
 
 Esse projeto tem como objetivo demonstrar como criar um modelo de machine learning com tunning de hiperparâmetros em um dataset de Churn rate.
 
@@ -96,18 +96,27 @@ Após selecionar o modelo base (Adaboost) procedemos ao tunning utilizando o dat
 
 A escolha da métrica de avaliação de um modelo de aprendizado de máquina deve ser atrelada ao problema que se quer atacar.
 Por se tratar de uma um projeto de churn queremos minimizar a presença de falsos negativos - quando se trata de um churn mas classificamos como not churned.
-Por isso, a métrica principal que levei em conta na escolha dos modelos foi Recall. O resultado foi o seguinte:
+Por isso, a métrica principal que levei em conta na escolha dos modelos foi Recall - mas as outras foram observadas também. O resultado foi o seguinte:
 
 
 ![image](https://user-images.githubusercontent.com/48839817/149375766-4980cc9f-f760-4320-8ffa-c525a3a7669d.png)
+
+Para efeitos de comparação rodei também um modelo com XGboost. Os resultados são os que seguem:
+
+![image](https://user-images.githubusercontent.com/48839817/149389210-8bad3e5e-665e-47c0-911f-66abda591c61.png)
+
+
+Como podemos ver ambos os modelos se comportaram de maneira semelhante. A escolha nesse caso seria sobre o XGB dado o seu custo computacional.
 
 
 
 Outras conclusões:
 
-* Mesmo em um dataset previamente trabalhado temos a necessidade de uma análise exploratória minuciosa
-* Em datasets desbalanceados um ponto crítico que interfere nos modelos é as escolhas que fazemos de sampling
-* Mesmo testando diversos modelos e diversas métricas a conclusão pelo melhor modelo só pode ser feita quando otimizarmos os hiperparâmetros, mas já temos pistas que indicam que Adaboost ou Random Forest podem ser boas escolhas.
+* Apesar de relativamente limpo a fase exploratória demonstrou a necessidade de limpezas na base
+* Essa fase também revelou a necessidade de balancear o dataset.
+* Apesar de proceder à Standarização de algumas variáveis para facilitar a testagem dos modelos base dentro do pipeline essa fase não se faz necessária dentro dos modelos escolhidos
+* Mesmo com a escolha e tunning dos hiperparâmetros no modelo AdaBoost ele não se mostrou suficientemente melhor que o modelo XGboost - que tem melhor performance computacional.
+* O XGboost é o modelo escolhido nessa análise tanto pela performance de suas métricas quanto pelo poder computacional requerido. Isso mostra que mesmo a partir de uma base segura pode ser interessante testar modelos próximos (caso possível) - em termos algorítimicos - com otimização de seus hiperparâmetros para fazer uma verificação dupla.
 
 
 ## Software & Bibliotecas
@@ -122,12 +131,15 @@ O Projeto utilizou Python 3 e as seguintes bibliotecas:
 -   [scikitplot](https://scikit-plot.readthedocs.io/en/stable/Quickstart.html)
 -   [datetime](https://docs.python.org/3/library/datetime.html)
 -   [numpy](https://numpy.org/)
+-   [lightgbm](https://lightgbm.readthedocs.io/en/latest/)
+-   [xgboost](https://xgboost.readthedocs.io/en/stable/)
+-   [scikitplot](https://scikit-plot.readthedocs.io/en/stable/Quickstart.html)
 
 
 **Meus Links:**
 
 * [LinkedIn](https://www.linkedin.com/in/leandro-minervino-b469681b/)
-* [Colab](https://colab.research.google.com/drive/1SkgqRVi2Y6016fKROhCkTVGpUivDyu3G?usp=sharing)
+* [Colab](https://colab.research.google.com/drive/1-nWd1q0R9RiVZ5cqOaQl9YhSBSBAX_C_?usp=sharing)
 
 
 
